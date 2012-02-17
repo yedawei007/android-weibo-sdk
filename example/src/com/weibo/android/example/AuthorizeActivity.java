@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.weibo.net.AccessToken;
 import com.weibo.net.DialogError;
+import com.weibo.net.Utility;
 import com.weibo.net.Weibo;
 import com.weibo.net.WeiboDialogListener;
 import com.weibo.net.WeiboException;
@@ -109,6 +110,12 @@ public class AuthorizeActivity extends Activity {
 
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Utility.clearCookies(this);
+        super.onDestroy();
     }
 
     class AuthDialogListener implements WeiboDialogListener {
