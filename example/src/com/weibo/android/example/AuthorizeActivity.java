@@ -36,20 +36,21 @@ import com.weibo.net.WeiboException;
 /**
  * Sample code for testing weibo APIs.
  * 
- * @author ZhangJie (zhangjie2@staff.sina.com.cn)
+ * @author  (luopeng@staff.sina.com.cn zhangjie2@staff.sina.com.cn 官方微博：WBSDK  http://weibo.com/u/2791136085)
  */
 
 public class AuthorizeActivity extends Activity {
 	/** Called when the activity is first created. */
 	private Button mLogin;
 	private TextView mToken;
+	private Weibo mWeibo;
 
 	private static final String URL_ACTIVITY_CALLBACK = "weiboandroidsdk://TimeLineActivity";
 	private static final String FROM = "xweibo";
 	
 	// 注意！！此处必须设置appkey及appsecret，如何获取新浪微博appkey和appsecret请另外查询相关信息，此处不作介绍
-	private static final String CONSUMER_KEY = "-------";// 替换为开发者的appkey，例如"1646212960";
-	private static final String CONSUMER_SECRET = "---------";// 替换为开发者的appkey，例如"94098772160b6f8ffc1315374d8861f9";
+	private static final String CONSUMER_KEY = "------";// 替换为开发者的appkey，例如"1646212860";
+	private static final String CONSUMER_SECRET = "-------";// 替换为开发者的appkey，例如"94097772160b6f8ffc1315374d8861f9";
 	
 	private String username = "";
 	private String password = "";
@@ -65,20 +66,20 @@ public class AuthorizeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if (v == mLogin) {
-					Weibo weibo = Weibo.getInstance();
+					mWeibo = Weibo.getInstance();
 
 					// !!Don't forget to set app_key and secret before get
 					// token!!!
-					weibo.setupConsumerConfig(CONSUMER_KEY, CONSUMER_SECRET);
+					mWeibo.setupConsumerConfig(CONSUMER_KEY, CONSUMER_SECRET);
 
 					// Oauth2.0
 					// 隐式授权认证方式
-					weibo.setRedirectUrl("------");// 注意！！此处回调页内容应该替换为与appkey对应的应用回调页
+					mWeibo.setRedirectUrl("http://www.sina.com");// 注意！！此处回调页内容应该替换为与appkey对应的应用回调页
 					// 对应的应用回调页可在开发者登陆新浪微博开发平台之后，
 					// 进入我的应用--应用详情--应用信息--高级信息--授权设置--应用回调页进行设置和查看，
 					// 应用回调页不可为空
 					
-					weibo.authorize(AuthorizeActivity.this,
+					mWeibo.authorize(AuthorizeActivity.this,
 							new AuthDialogListener());
 
 					// try {
@@ -125,6 +126,12 @@ public class AuthorizeActivity extends Activity {
 		Utility.clearCookies(this);
 		super.onDestroy();
 	}
+	
+	//支持SSO 须覆写此方法
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mWeibo.authorizeCallBack(requestCode, resultCode, data);
+    }
 
 	class AuthDialogListener implements WeiboDialogListener {
 
@@ -135,7 +142,7 @@ public class AuthorizeActivity extends Activity {
 			mToken.setText("access_token : " + token + "  expires_in: "
 					+ expires_in);
 			AccessToken accessToken = new AccessToken(token, CONSUMER_SECRET);
-			accessToken.setExpiresIn(expires_in);
+			accessToken.setExpiresTime(expires_in);
 			Weibo.getInstance().setAccessToken(accessToken);
 			Intent intent = new Intent();
 			intent.setClass(AuthorizeActivity.this, TestActivity.class);

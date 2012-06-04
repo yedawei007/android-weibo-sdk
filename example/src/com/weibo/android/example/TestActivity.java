@@ -41,7 +41,7 @@ import com.weibo.net.WeiboParameters;
 /**
  * Sample code for testing weibo APIs.
  * 
- * @author ZhangJie (zhangjie2@staff.sina.com.cn)
+ * @author  (luopeng@staff.sina.com.cn zhangjie2@staff.sina.com.cn 官方微博：WBSDK  http://weibo.com/u/2791136085)
  */
 
 public class TestActivity extends Activity {
@@ -51,14 +51,6 @@ public class TestActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.timeline);
-        // Uri uri = this.getIntent().getData();
-        // String oauth_verifier = uri.getQueryParameter("oauth_verifier");
-        // mWeibo.addOauthverifier(oauth_verifier);
-        // try {
-        // mWeibo.generateAccessToken(this, null);
-        // }catch (WeiboException e1) {
-        // e1.printStackTrace();
-        // }
         mResult = (TextView) this.findViewById(R.id.tvResult);
         Button getShare = (Button) this.findViewById(R.id.btnShare);
         getShare.setOnClickListener(new OnClickListener() {
@@ -80,7 +72,6 @@ public class TestActivity extends Activity {
                     share2weibo("abc", picPath);
                     Intent i = new Intent(TestActivity.this, ShareActivity.class);
                     TestActivity.this.startActivity(i);
-
                 } catch (WeiboException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
